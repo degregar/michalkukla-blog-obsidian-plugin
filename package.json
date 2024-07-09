@@ -1,7 +1,7 @@
 {
-	"name": "astro-blog-image-renamer",
+	"name": "michalkukla-blog-obsidian-plugin",
 	"version": "1.0.0",
-	"description": "Rename Astro blog images",
+	"description": "MichalKukla.pl blog plugin for Obsidian - it handles several tasks like image renaming, adding publish date, and more.",
 	"main": "main.js",
 	"scripts": {
 		"dev": "node esbuild.config.mjs",

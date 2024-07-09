@@ -1,9 +1,9 @@
 {
-	"id": "astro-blog-image-renamer",
-	"name": "Astro Blog image renamer",
+	"id": "michalkukla-blog",
+	"name": "MichalKukla.pl",
 	"version": "1.0.0",
 	"minAppVersion": "0.15.0",
-	"description": "Changes image links",
+	"description": "All sorts of things",
 	"author": "Michał Kukla",
 	"authorUrl": "https://michalkukla.pl",
 	"isDesktopOnly": true
