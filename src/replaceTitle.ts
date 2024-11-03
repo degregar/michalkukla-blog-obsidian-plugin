@@ -33,7 +33,7 @@ const updateTitleAndSlug = async (plugin: Plugin, file: TFile) => {
 		if (titleContainer) {
 			titleContainer.textContent = frontmatterTitle || file.basename;
 
-			// Create a new HTML element for the slug
+			// Create or update the HTML element for the slug
 			let slugElement = document.querySelector(
 				".custom-slug-display"
 			) as HTMLElement;
@@ -53,28 +53,41 @@ const updateTitleAndSlug = async (plugin: Plugin, file: TFile) => {
 		) as HTMLElement;
 
 		if (editableSlug) {
+			// Check if there's already a custom-title-display and remove duplicates
+			const existingTitleDisplays =
+				editableSlug.parentElement?.querySelectorAll(
+					".custom-title-display"
+				);
+
+			existingTitleDisplays?.forEach((el, index) => {
+				if (index > 0 || existingTitleDisplays.length > 1) {
+					el.remove();
+				}
+			});
+
 			// Create or update the non-editable title element
-			let nonEditableTitle = editableSlug.querySelector(
+			let nonEditableTitle = editableSlug.parentElement?.querySelector(
 				".custom-title-display"
 			) as HTMLElement;
 
 			if (!nonEditableTitle) {
 				nonEditableTitle = document.createElement("div");
 				nonEditableTitle.classList.add("custom-title-display");
-				editableSlug.parentElement?.insertAfter(
+
+				// Style non-editable title by copying all the styles and classes from editableSlug
+				nonEditableTitle.style.cssText = editableSlug.style.cssText;
+				nonEditableTitle.classList.add(
+					// @ts-ignore
+					...editableSlug.classList.values()
+				);
+
+				editableSlug.parentElement?.insertBefore(
 					nonEditableTitle,
-					editableSlug
+					editableSlug.nextSibling
 				);
 			}
 
 			nonEditableTitle.textContent = frontmatterTitle || file.basename;
-
-			// Style non-editable title by copying all the styles and classes from editableSlug
-			nonEditableTitle.style.cssText = editableSlug.style.cssText;
-			nonEditableTitle.classList.add(
-				// @ts-ignore
-				...editableSlug.classList.values()
-			);
 
 			// Change inlineTitle to slug and style it
 			editableSlug.style.fontSize = "0.9em";
