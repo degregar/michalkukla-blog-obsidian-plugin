@@ -1,6 +1,11 @@
 import { Plugin, TFile } from "obsidian";
 
 const updateTitleAndSlug = async (plugin: Plugin, file: TFile) => {
+	const activeFile = plugin.app.workspace.getActiveFile();
+	if (!activeFile || activeFile.path !== file.path) {
+		return; // Ignoruj, jeśli plik nie jest aktualnie otwarty
+	}
+
 	if (file && file.extension === "md") {
 		const content = await plugin.app.vault.read(file);
 		let frontmatterTitle = null;
