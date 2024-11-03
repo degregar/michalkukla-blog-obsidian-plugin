@@ -1,7 +1,6 @@
 import { Plugin, TFile } from "obsidian";
 
 const updateTitleAndSlug = async (plugin: Plugin, file: TFile) => {
-	console.log("updateTitleAndSlug");
 	if (file && file.extension === "md") {
 		const content = await plugin.app.vault.read(file);
 		let frontmatterTitle = null;
@@ -21,14 +20,11 @@ const updateTitleAndSlug = async (plugin: Plugin, file: TFile) => {
 			}
 		}
 
-		console.log("frontmatterTitle", frontmatterTitle);
-
 		// Find the title container in Obsidian UI and replace its content
 		const titleContainer = document.querySelector(
 			".workspace-leaf.mod-active .view-header-title"
 		) as HTMLElement;
 		if (titleContainer) {
-			console.log("titleContainer", titleContainer);
 			titleContainer.textContent = frontmatterTitle || file.basename;
 
 			// Create or update the HTML element for the slug
@@ -37,7 +33,6 @@ const updateTitleAndSlug = async (plugin: Plugin, file: TFile) => {
 			) as HTMLElement;
 
 			if (!slugElement) {
-				console.log("slugElement", slugElement);
 				slugElement = document.createElement("div");
 				slugElement.classList.add("custom-slug-display");
 				slugElement.style.fontSize = "0.9em";
