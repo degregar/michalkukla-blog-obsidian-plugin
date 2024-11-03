@@ -1,6 +1,7 @@
 import { Plugin, TFile } from "obsidian";
 
 const updateTitleAndSlug = async (plugin: Plugin, file: TFile) => {
+	console.log("updateTitleAndSlug");
 	if (file && file.extension === "md") {
 		const content = await plugin.app.vault.read(file);
 		let frontmatterTitle = null;
@@ -20,19 +21,23 @@ const updateTitleAndSlug = async (plugin: Plugin, file: TFile) => {
 			}
 		}
 
+		console.log("frontmatterTitle", frontmatterTitle);
+
 		// Find the title container in Obsidian UI and replace its content
 		const titleContainer = document.querySelector(
-			".view-header-title"
+			".workspace-leaf.mod-active .view-header-title"
 		) as HTMLElement;
 		if (titleContainer) {
+			console.log("titleContainer", titleContainer);
 			titleContainer.textContent = frontmatterTitle || file.basename;
 
 			// Create or update the HTML element for the slug
 			let slugElement = document.querySelector(
-				".custom-slug-display"
+				".workspace-leaf.mod-active .custom-slug-display"
 			) as HTMLElement;
 
 			if (!slugElement) {
+				console.log("slugElement", slugElement);
 				slugElement = document.createElement("div");
 				slugElement.classList.add("custom-slug-display");
 				slugElement.style.fontSize = "0.9em";
@@ -43,14 +48,14 @@ const updateTitleAndSlug = async (plugin: Plugin, file: TFile) => {
 		}
 
 		const editableSlug = document.querySelector(
-			".inline-title"
+			".workspace-leaf.mod-active .inline-title"
 		) as HTMLElement;
 
 		if (editableSlug) {
 			// Check if there's already a custom-title-display and remove duplicates
 			const existingTitleDisplays =
 				editableSlug.parentElement?.querySelectorAll(
-					".custom-title-display"
+					".workspace-leaf.mod-active .custom-title-display"
 				);
 
 			existingTitleDisplays?.forEach((el, index) => {
@@ -61,7 +66,7 @@ const updateTitleAndSlug = async (plugin: Plugin, file: TFile) => {
 
 			// Create or update the non-editable title element
 			let nonEditableTitle = editableSlug.parentElement?.querySelector(
-				".custom-title-display"
+				".workspace-leaf.mod-active .custom-title-display"
 			) as HTMLElement;
 
 			if (!nonEditableTitle) {
