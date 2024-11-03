@@ -1,30 +1,24 @@
 import { Plugin, TFile } from "obsidian";
 
 const updateTitleAndSlug = async (plugin: Plugin, file: TFile) => {
-	console.log("file-open");
 	if (file && file.extension === "md") {
-		console.log("file-open md");
 		const content = await plugin.app.vault.read(file);
 		let frontmatterTitle = null;
 		let slug = file.basename; // Default slug is the filename
 
 		if (content.startsWith("---")) {
-			console.log("file-open md ---");
 			const frontmatterEnd = content.indexOf("---", 3) + 3;
 			const frontmatterContent = content.substring(0, frontmatterEnd);
 			const frontmatterLines = frontmatterContent.split("\n");
 
 			for (const line of frontmatterLines) {
 				if (line.startsWith("title:")) {
-					console.log("file-open md title");
 					frontmatterTitle = line.replace("title:", "").trim();
 				} else if (line.startsWith("slug:")) {
 					slug = line.replace("slug:", "").trim();
 				}
 			}
 		}
-
-		console.log("file-open md titleContainer", frontmatterTitle, slug);
 
 		// Find the title container in Obsidian UI and replace its content
 		const titleContainer = document.querySelector(
@@ -107,6 +101,13 @@ export function replaceTitle(plugin: Plugin) {
 	// on change file name
 	plugin.registerEvent(
 		plugin.app.vault.on("rename", async (file: TFile) => {
+			await updateTitleAndSlug(plugin, file);
+		})
+	);
+
+	// on modify file content
+	plugin.registerEvent(
+		plugin.app.vault.on("modify", async (file: TFile) => {
 			await updateTitleAndSlug(plugin, file);
 		})
 	);
